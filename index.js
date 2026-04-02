@@ -21,7 +21,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://mern-cine-project-jf9w.vercel.app"
+      "https://mern-cine-project-v1ow.vercel.app"
     ],
     credentials: true
   })
