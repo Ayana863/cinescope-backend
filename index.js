@@ -55,16 +55,15 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
+      // 🔥 DEBUG LOG
+      console.log("Origin:", origin);
+
+      // ✅ allow ALL for now (temporary fix)
+      callback(null, true);
     },
     credentials: true
   })
 );
-
 
 
 // ✅ Middlewares
