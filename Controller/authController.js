@@ -3,11 +3,74 @@ const bcrypt = require("bcrypt")
 const jwt = require('jsonwebtoken')
 
 // REGISTER
+// const UserRegister = async (req, res) => {
+//   const { name, email, password } = req.body
+
+//   try {
+//     //  Check required fields
+//     if (!name || !email || !password) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "All fields are required",
+//       })
+//     }
+
+//     //  Check existing user
+//     const existingUser = await User.findOne({ email })
+//     if (existingUser) {
+//       return res.status(409).json({
+//         success: false,
+//         message: "User already exists",
+//       })
+//     }
+
+//     // Hash password
+//     const hashedPassword = await bcrypt.hash(password, 10)
+
+//     // Handle uploaded image
+//     let profilePic = ""
+//     if (req.file) {
+//       profilePic = `http://localhost:3000/uploads/${req.file.filename}`
+//     }
+
+//     //  Create new user 
+//     const newUser = new User({
+//       name,
+//       email,
+//       password: hashedPassword,
+//     role: role || "user",
+//       profilePic
+//     })
+
+//     //  Save user
+//     await newUser.save()
+
+//     //  Response
+//     res.status(201).json({
+//       success: true,
+//       message: "User registered successfully",
+//       user: {
+//         name: newUser.name,
+//         email: newUser.email,
+//         role: newUser.role,
+
+//         profilePic: newUser.profilePic
+//       }
+//     })
+
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: "Server error",
+//       error: error.message,
+//     })
+//   }
+// }
+
 const UserRegister = async (req, res) => {
-  const { name, email, password } = req.body
+  const { name, email, password, role } = req.body
 
   try {
-    //  Check required fields
     if (!name || !email || !password) {
       return res.status(400).json({
         success: false,
@@ -15,7 +78,6 @@ const UserRegister = async (req, res) => {
       })
     }
 
-    //  Check existing user
     const existingUser = await User.findOne({ email })
     if (existingUser) {
       return res.status(409).json({
@@ -24,28 +86,23 @@ const UserRegister = async (req, res) => {
       })
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    // Handle uploaded image
     let profilePic = ""
     if (req.file) {
-      profilePic = `http://localhost:3000/uploads/${req.file.filename}`
+      profilePic = `${process.env.BASE_URL}/uploads/${req.file.filename}`
     }
 
-    //  Create new user 
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
-    role: role || "user",
+      role: role || "user",
       profilePic
     })
 
-    //  Save user
     await newUser.save()
 
-    //  Response
     res.status(201).json({
       success: true,
       message: "User registered successfully",
@@ -53,21 +110,20 @@ const UserRegister = async (req, res) => {
         name: newUser.name,
         email: newUser.email,
         role: newUser.role,
-
         profilePic: newUser.profilePic
       }
     })
 
   } catch (error) {
+    console.error("REGISTER ERROR:", error)
+
     res.status(500).json({
       success: false,
       message: "Server error",
-      error: error.message,
+      error: error.message
     })
   }
 }
-
-
 
 // LOGIN
 
