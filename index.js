@@ -10,14 +10,35 @@ const watchHistoryRoutes = require("./Routes/watchHistoryRoutes")
 const ratingRoutes = require("./Routes/ratingRouter")
 
 const app = express()
+// app.use(
+//   cors({
+//     origin: "http://localhost:5000", 
+//     credentials: true, 
+//   })
+// )
+
 app.use(
   cors({
-    origin: "http://localhost:5000", 
-    credentials: true, 
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "https://mern-cine-project-ou9c.vercel.app"
+      ];
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true
   })
-)
-app.use(cookieParser())
+);
 app.use(express.json())
+app.use(cookieParser())
+
 app.use("/uploads", express.static("uploads"))
 app.use('/auth', authRouter)
 app.use('/admin', movieRouter)
