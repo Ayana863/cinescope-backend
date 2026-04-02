@@ -50,7 +50,7 @@ const app = express()
 // CORS 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://your-frontend-domain.com" 
+  "https://cinescope-backend-20p2.onrender.com" 
 ]
 
 app.use(
