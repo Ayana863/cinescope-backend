@@ -56,9 +56,35 @@ const addRating = async (req, res) => {
 
 
 //  GET RATINGS 
+// const getRatings = async (req, res) => {
+//   try {
+//     const ratings = await Rating.find({ movieId: req.params.movieId })
+
+//     const total = ratings.length
+
+//     const avg =
+//       total > 0
+//         ? ratings.reduce((acc, r) => acc + r.rating, 0) / total
+//         : 0
+
+//     res.json({
+//       totalRatings: total,
+//       averageRating: Number(avg.toFixed(1))
+//     })
+
+//   } catch (err) {
+//     res.status(500).json({ error: err.message })
+//   }
+// }
 const getRatings = async (req, res) => {
   try {
-    const ratings = await Rating.find({ movieId: req.params.movieId })
+    const { movieId } = req.params
+
+    if (!movieId) {
+      return res.status(400).json({ message: "movieId is required" })
+    }
+
+    const ratings = await Rating.find({ movieId })
 
     const total = ratings.length
 
@@ -73,8 +99,8 @@ const getRatings = async (req, res) => {
     })
 
   } catch (err) {
+    console.log("GET RATING ERROR:", err) // 👈 important
     res.status(500).json({ error: err.message })
   }
 }
-
 module.exports = { addRating, getRatings }

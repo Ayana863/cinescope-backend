@@ -19,23 +19,15 @@ const app = express()
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
-
-      const allowedOrigins = [
-        "http://localhost:5173",
-        "https://mern-cine-project-ou9c.vercel.app"
-      ];
-
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      } else {
-        return callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: [
+      "http://localhost:5173",
+      "https://mern-cine-project-jf9w.vercel.app"
+    ],
     credentials: true
   })
-);
+)
+
+
 app.use(express.json())
 app.use(cookieParser())
 
