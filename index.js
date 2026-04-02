@@ -32,26 +32,25 @@
 //     console.log("Server running on port 5000")
 //   })
 // })
+require("dotenv").config();
+const cors = require("cors");
+const express = require("express");
+const connectDB = require("./DB/Connection");
+const cookieParser = require("cookie-parser");
 
-require("dotenv").config()
-const cors = require("cors")
-const express = require("express")
-const connectDB = require("./DB/Connection")
-const cookieParser = require("cookie-parser")
+const authRouter = require("./Routes/authRouter");
+const movieRouter = require("./Routes/movieRouter");
+const userRoutes = require("./Routes/userRoutes");
+const watchHistoryRoutes = require("./Routes/watchHistoryRoutes");
+const ratingRoutes = require("./Routes/ratingRouter");
 
-const authRouter = require("./Routes/authRouter")
-const movieRouter = require("./Routes/movieRouter")
-const userRoutes = require("./Routes/userRoutes")
-const watchHistoryRoutes = require("./Routes/watchHistoryRoutes")
-const ratingRoutes = require("./Routes/ratingRouter")
+const app = express();
 
-const app = express()
-
-// CORS 
+// ✅ CORRECT CORS SETUP
 const allowedOrigins = [
-  "http://localhost:5173",
-  "https://cinescope-backend-20p2.onrender.com" 
-]
+  "http://localhost:5000",
+
+];
 
 app.use(
   cors({
@@ -59,36 +58,39 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error("Not allowed by CORS"))
+        callback(new Error("Not allowed by CORS"));
       }
     },
     credentials: true
   })
-)
+);
 
-// Middlewares
+
+
+// ✅ Middlewares
 app.use(cookieParser());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
 
-//  Static files
-app.use("/uploads", express.static("uploads"))
+// ✅ Static files
+app.use("/uploads", express.static("uploads"));
 
-// Routes
-app.use("/auth", authRouter)
-app.use("/admin", movieRouter)
-app.use("/admin/users", userRoutes)
-app.use("/watch-history", watchHistoryRoutes)
-app.use("/ratings", ratingRoutes)
+// ✅ Routes
+app.use("/auth", authRouter);
+app.use("/admin", movieRouter);
+app.use("/admin/users", userRoutes);
+app.use("/watch-history", watchHistoryRoutes);
+app.use("/ratings", ratingRoutes);
 
-const PORT = process.env.PORT || 5000
+// ✅ PORT FIX (RENDER)
+const PORT = process.env.PORT || 5000;
 
 connectDB()
   .then(() => {
     app.listen(PORT, () => {
-      console.log(` Server running on port ${PORT}`)
+      console.log(`Server running on port ${PORT}`);
     });
   })
   .catch((err) => {
-    console.error(" DB Connection Failed:", err)
-  })
+    console.error("DB connection failed:", err);
+  });
