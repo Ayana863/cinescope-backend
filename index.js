@@ -16,7 +16,7 @@ const app = express()
 // Allowed origins
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://mern-cine-project-gdf4kaape-ayana-ms-projects.vercel.app/"
+  "https://mern-cine-project.vercel.app/"
 ]
 
 // CORS setup
